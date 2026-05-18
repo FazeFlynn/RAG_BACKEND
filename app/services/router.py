@@ -17,6 +17,9 @@ IDENTITY_PATTERNS = [
     "are you an ai", "are you a bot", "are you human",
     "who designed you", "who trained you", "what model are you",
     "who is islam", "islam kathat",
+    "what does rag stand for",
+    "what is rag",
+    "what is a rag system",
 ]
 
 
