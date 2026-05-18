@@ -15,14 +15,16 @@ def create_app() -> FastAPI:
         version="1.0.0",
     )
 
-    # CORS — allow frontend origin (set via env var in production)
+    # CORS — must be added BEFORE any routes
     origins = [o.strip() for o in settings.allowed_origins.split(",") if o.strip()]
     app.add_middleware(
         CORSMiddleware,
         allow_origins=origins,
         allow_credentials=True,
-        allow_methods=["*"],
+        allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
         allow_headers=["*"],
+        expose_headers=["*"],
+        max_age=3600,          # cache preflight for 1 hour
     )
 
     # Routes
