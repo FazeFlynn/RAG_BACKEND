@@ -23,8 +23,6 @@ def load_file(file_path: str) -> list[dict[str, Any]]:
         ".xls": _load_excel,
         ".xlsx": _load_excel,
         ".docx": _load_docx,
-        ".html": _load_html,
-        ".htm": _load_html,
         ".json": _load_text,
     }
 
@@ -137,30 +135,6 @@ def _load_docx(file_path: str) -> list[dict[str, Any]]:
         "metadata": {
             "source": os.path.basename(file_path),
             "type": "docx",
-        },
-    }]
-
-
-def _load_html(file_path: str) -> list[dict[str, Any]]:
-    from bs4 import BeautifulSoup
-
-    with open(file_path, "r", encoding="utf-8", errors="replace") as f:
-        soup = BeautifulSoup(f.read(), "html.parser")
-
-    # Remove script and style elements
-    for tag in soup(["script", "style", "nav", "footer", "header"]):
-        tag.decompose()
-
-    text = soup.get_text(separator="\n", strip=True)
-
-    if not text:
-        return []
-
-    return [{
-        "content": text,
-        "metadata": {
-            "source": os.path.basename(file_path),
-            "type": "html",
         },
     }]
 
