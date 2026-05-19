@@ -7,7 +7,6 @@ from loguru import logger
 
 from app.core.config import settings
 from app.services import vector_store
-from app.services.reranker import rerank
 
 
 def retrieve(query: str, top_k: int | None = None) -> list[dict[str, Any]]:
@@ -15,7 +14,7 @@ def retrieve(query: str, top_k: int | None = None) -> list[dict[str, Any]]:
     if top_k is None:
         top_k = settings.top_k
 
-    # Fetch more candidates if we're going to rerank
+    # Fetch more candidates if reranking is enabled
     search_k = top_k * 3 if settings.use_reranker else top_k
 
     # Vector search
@@ -25,9 +24,11 @@ def retrieve(query: str, top_k: int | None = None) -> list[dict[str, Any]]:
         logger.debug("No documents found in vector store")
         return []
 
-    # Rerank for better precision
+    # Rerank only if enabled — import lazily so model never loads when disabled
     if settings.use_reranker and len(candidates) > top_k:
+        from app.services.reranker import rerank   # lazy import
         results = rerank(query, candidates, top_k=top_k)
+        logger.info(f"Reranked to {len(results)} chunks")
     else:
         results = candidates[:top_k]
 
