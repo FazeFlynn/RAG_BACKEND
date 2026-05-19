@@ -42,7 +42,7 @@ def add_documents(chunks: list[dict[str, Any]]) -> int:
     ids = [str(uuid.uuid4()) for _ in chunks]
 
     # Embed in batches to avoid memory issues
-    batch_size = 64
+    batch_size = 16
     for i in range(0, len(texts), batch_size):
         batch_texts = texts[i:i + batch_size]
         batch_metadatas = metadatas[i:i + batch_size]
