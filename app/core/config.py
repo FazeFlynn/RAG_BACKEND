@@ -22,7 +22,7 @@ class Settings(BaseSettings):
 
     # LLM (Groq)
     groq_api_key: str = ""
-    groq_model: str = "llama-3.1-8b-instant"
+    groq_model: str = "openai/gpt-oss-120b"
 
     # Vector Store
     chroma_persist_dir: str = "./data/chroma_db"
